@@ -13,7 +13,8 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2017-04-01' = {
 }
 
 resource eventhub 'Microsoft.EventHub/namespaces/eventhubs@2017-04-01' = {
-  name: '${eventHubNamespace.name}/${hubname}'
+  name: hubname
+  parent: eventHubNamespace
   properties: {
     messageRetentionInDays: 7
     partitionCount: 1
@@ -21,10 +22,8 @@ resource eventhub 'Microsoft.EventHub/namespaces/eventhubs@2017-04-01' = {
 }
 
 resource firewallMonHub 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2017-04-01' = {
-  name: '${eventHubNamespace.name}/${hubname}/${sharedkey}'
-  dependsOn: [
-    eventhub
-  ]
+  name: sharedkey
+  parent: eventhub
   properties: {
     rights: [
       'Listen'
