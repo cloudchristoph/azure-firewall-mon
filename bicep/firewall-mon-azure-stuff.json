@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.13.1.58284",
-      "templateHash": "2266015696995589825"
+      "templateHash": "11911368015701803816"
     }
   },
   "parameters": {
@@ -59,8 +59,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.EventHub/namespaces/eventhubs', split(format('{0}/{1}', parameters('namespace'), parameters('hubname')), '/')[0], split(format('{0}/{1}', parameters('namespace'), parameters('hubname')), '/')[1])]",
-        "[resourceId('Microsoft.EventHub/namespaces', parameters('namespace'))]"
+        "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('namespace'), parameters('hubname'))]"
       ]
     }
   ]
