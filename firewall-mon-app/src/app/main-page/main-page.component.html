@@ -63,6 +63,16 @@
                   <mat-chip-option selectable="false" [selected]="isTimestampGMT()" (click)="setTimeStampGMT()">GMT</mat-chip-option>
                   <mat-chip-option selectable="false" [selected]="isTimestampLocal()" (click)="setTimestampLocal()">local time</mat-chip-option>
                 </mat-chip-listbox>
+                <label>category</label>
+                <mat-chip-listbox>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == ''"               (click)="setCategoryFilter('')">all</mat-chip-option>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == 'NetworkRule'"    (click)="setCategoryFilter('NetworkRule')">Network Rules</mat-chip-option>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == 'ApplicationRule'" (click)="setCategoryFilter('ApplicationRule')">App Rules</mat-chip-option>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == 'NATRule'"        (click)="setCategoryFilter('NATRule')">NAT Rules</mat-chip-option>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == 'AzDnsQuery'"     (click)="setCategoryFilter('AzDnsQuery')">DNS Queries</mat-chip-option>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == 'ThreatIntel'"    (click)="setCategoryFilter('ThreatIntel')">Threat Intel</mat-chip-option>
+                  <mat-chip-option selectable="false" [selected]="selectedCategory == 'IdpsSignature'"  (click)="setCategoryFilter('IdpsSignature')">IDPS</mat-chip-option>
+                </mat-chip-listbox>
                 <div [style.display]="isPromptTypeClassic() ? 'inline' : 'none'">
                   filter
                   <mat-chip-listbox>

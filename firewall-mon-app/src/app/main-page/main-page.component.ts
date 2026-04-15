@@ -77,7 +77,15 @@ export class MainPageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private onDataSourceChanged(data: Array<FirewallDataRow>) {
-    this.dataSource = new TableVirtualScrollDataSource(data);
+    // Update data in-place to preserve scroll position.
+    // The filterPredicate is set once in ngOnInit via initDataSource().
+    this.dataSource.data = data;
+    this.dataSource.filter = " " + this.filterText;
+    this.totalRows = data.length;
+    this.visibleRows = this.dataSource.filteredData.length;
+  }
+
+  private initDataSource() {
     this.dataSource.filterPredicate = (data: FirewallDataRow, filter_in: string) => {
       try {
 
@@ -160,13 +168,9 @@ export class MainPageComponent implements AfterViewInit, OnInit, OnDestroy {
 
         return filters == filterHits;
       } catch (error) {
-        //console.log ("Error [" + error + "] in filterPredicate working on: " + data);
         return true;
       }
     };
-    this.dataSource.filter = " " + this.filterText;; // not empty filter string forces filterPredicate to be called
-    this.totalRows = data.length;
-    this.visibleRows = this.dataSource.filteredData.length;
   }
 
   private onRowSkipped(skipped: number) {
@@ -256,6 +260,13 @@ export class MainPageComponent implements AfterViewInit, OnInit, OnDestroy {
   public selectedRowJson: string | null = null;
   public isPaused: boolean = false;
   public jsontextHeight: string = "";
+  public selectedCategory: string = "";
+
+  public setCategoryFilter(cat: string) {
+    this.selectedCategory = cat;
+    this.searchFieldService.searchParams.category = cat ? [cat] : [];
+    this.refreshList();
+  }
 
   public panelOpenState = false;
   public timestampFormat: TimestampFormat = TimestampFormat.GMT;
@@ -520,6 +531,7 @@ export class MainPageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initDataSource();
     this.firewallSource.start();
 
     this.searchFieldSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
