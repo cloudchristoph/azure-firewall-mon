@@ -9,7 +9,7 @@ import { LoggingService } from './services/logging.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'az-firewall-mon';
+  title = 'Azure Almost Live Logs';
 
   constructor(private router: Router,
     private logingService: LoggingService) {
