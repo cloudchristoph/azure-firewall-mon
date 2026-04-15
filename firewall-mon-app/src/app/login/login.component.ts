@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.getUserName();
     this.getBuildDate();
+    this.applyServerConfig();
   }
 
   buildDate: string = '';
@@ -98,6 +99,36 @@ export class LoginComponent implements OnInit {
     } catch (error) {
       console.error('Error fetching build date:', error);
       this.buildDate = 'Unknown';
+    }
+  }
+
+  // Checks if the backend has a pre-configured Event Hub connection string.
+  // If so, applies it and navigates directly to the live view, skipping manual entry.
+  async applyServerConfig(): Promise<void> {
+    try {
+      const csResponse = await fetch('/api/settings/eventhub_connection_string');
+      if (!csResponse.ok) return;
+
+      const cs = await csResponse.text();
+      if (!cs || cs === 'not set') return;
+
+      this.eventHubConnectionString = cs;
+
+      const cgResponse = await fetch('/api/settings/eventhub_consumer_group');
+      if (cgResponse.ok) {
+        const cg = await cgResponse.text();
+        if (cg && cg !== 'not set') {
+          this.eventHubConsumerGroup = cg;
+        }
+      }
+
+      this.model.eventHubConnection = this.eventHubConnectionString;
+      this.model.eventHubConsumerGroup = this.eventHubConsumerGroup;
+      this.model.demoMode = false;
+      this.model.save();
+      this.router.navigateByUrl('/live');
+    } catch (error) {
+      console.log('No server-configured Event Hub settings, using manual entry.');
     }
   }
 }
