@@ -4,5 +4,16 @@
   ],
   "responseOverrides": {
     "404": { "redirect": "/", "statusCode": 302 }
+  },
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/d88a9960-2037-45d4-8d7e-ddbc0eb47605/v2.0",
+          "clientIdSettingName": "AZURE_CLIENT_ID",
+          "clientSecretSettingName": "AZURE_CLIENT_SECRET"
+        }
+      }
+    }
   }
 }
